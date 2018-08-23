@@ -1,7 +1,8 @@
 ﻿using Blazor.Extensions;
-using Microsoft.AspNetCore.Blazor.Browser.Interop;
+using Blazor.Extensions.Storage;
 using Microsoft.AspNetCore.Blazor.Components;
 using Microsoft.Extensions.Logging;
+using Microsoft.JSInterop;
 using Randify.Models;
 using System;
 using System.Collections.Generic;
@@ -52,7 +53,9 @@ namespace Randify.Services
         {
             get
             {
-                return _localStorage.GetItem<User>("user");
+                var task = _localStorage.GetItem<User>("user");
+                task.Wait();
+                return task.Result;
             }
             set
             {
@@ -67,7 +70,9 @@ namespace Randify.Services
         {
             get
             {
-                return _localStorage.GetItem<AuthenticationToken>("token");
+                var task = _localStorage.GetItem<AuthenticationToken>("token");
+                task.Wait();
+                return task.Result;
             }
             set
             {
@@ -84,7 +89,7 @@ namespace Randify.Services
             {
                 User = null;
                 Token = null;
-                RegisteredFunction.Invoke<bool>("deleteAllCookies");
+                JSRuntime.Current.InvokeAsync<bool>("deleteAllCookies");
             }
             catch (Exception ex)
             {

@@ -8,11 +8,10 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Blazor;
 using Microsoft.AspNetCore.Blazor.Browser.Http;
-using Microsoft.AspNetCore.Blazor.Browser.Interop;
 using Microsoft.AspNetCore.Blazor.Browser.Services;
 using Microsoft.AspNetCore.Blazor.Components;
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
+using Microsoft.JSInterop;
 using Randify.Delegates;
 using Randify.Models;
 using Randify.Models.SpotifyModel;
@@ -63,7 +62,7 @@ namespace Randify.Services
 
             try
             {
-                _logger.LogInformation("EnableSpotifyPlayer: " + RegisteredFunction.Invoke<bool>("enableSpotifyPlayer", token.AccessToken));                
+                _logger.LogInformation("EnableSpotifyPlayer: " + JSRuntime.Current.InvokeAsync<bool>("enableSpotifyPlayer", token.AccessToken));                
             }
             catch (Exception ex)
             {
@@ -80,7 +79,7 @@ namespace Randify.Services
         {
             try
             {
-                _logger.LogInformation("Play: " + RegisteredFunction.Invoke<string>("play", Uri));
+                _logger.LogInformation("Play: " + JSRuntime.Current.InvokeAsync<string>("play", Uri));
             }
             catch (Exception ex)
             {
@@ -95,7 +94,7 @@ namespace Randify.Services
         {
             try
             {
-                _logger.LogInformation("TogglePlay: " + RegisteredFunction.Invoke<bool>("togglePlay"));
+                _logger.LogInformation("TogglePlay: " + JSRuntime.Current.InvokeAsync<bool>("togglePlay"));
             }
             catch (Exception ex)
             { 
